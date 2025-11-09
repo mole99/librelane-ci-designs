@@ -62,28 +62,22 @@ def main(
     ff_state_out = flow.start(tag=run_tag)
     
     ff_macro = Macro.from_state(ff_state_out)
-    ff_macro.instantiate("my_ff_1", (15, 15))
-    ff_macro.instantiate("my_ff_2", (15, 45))
-    ff_macro.instantiate("my_ff_3", (50, 15))
-    ff_macro.instantiate("my_ff_4", (50, 45))
+    ff_macro.instantiate("my_ff_1", (35, 35))
+    ff_macro.instantiate("my_ff_2", (35, 75))
+    ff_macro.instantiate("my_ff_3", (70, 35))
+    ff_macro.instantiate("my_ff_4", (70, 75))
 
     print(ff_macro)
-    
-    aaa
 
     ####
-    
-    verilog_files = [
-        os.path.join(__dir__, "src", "hold_violations_3.sv")
-    ]
-    
+
     # Flow configuration
     flow_cfg = {
         # Design
         "DESIGN_NAME"           : "hold_violations_3",
 
         # Sources
-        "VERILOG_FILES"         : verilog_files,
+        "VERILOG_FILES"         : [os.path.join(__dir__, "src", "hold_violations_3.sv")],
 
         # Clock
         "CLOCK_PORT"            : "clk_i",
@@ -91,13 +85,15 @@ def main(
 
         # Die area
         "FP_SIZING"             : "absolute",
-        "DIE_AREA"              : [0, 0, 100, 100],
+        "DIE_AREA"              : [0, 0, 150, 150],
         "PL_TARGET_DENSITY_PCT" : 60,
         
         "MACROS": {"flipflop": ff_macro},
         
         "PDN_HOFFSET": 5,
         "PDN_HPITCH" : 12.4,
+        
+        "RSZ_DONT_TOUCH_RX": "data_o.*",
     }
     
     flow = TargetFlow(
